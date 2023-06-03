@@ -246,7 +246,7 @@ void filler() {
 				x = stod(currentLine); line++;
 			}
 			else if(line == 7){
-				y = stod(currentLine); line  = 5;s
+				y = stod(currentLine); line  = 5;
 				Point P = Point(x, y);
 				Node* dot = new Node(name, P);
 				glob->addDot(glob, dot);
