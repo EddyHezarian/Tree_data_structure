@@ -56,6 +56,7 @@ private:
 	region reg;
 	// Contains details of node (if Node is a point)
 	Point pos;
+	bool isDote;
 	string name;
 	// Children of this node
 	Node* nw, * ne, * sw, * se;
@@ -64,6 +65,7 @@ public:
 	Node(region R ) {
 		this->reg = R;
 		this->pos.x = NULL;
+		this->isDote = false;
 		this->pos.y = NULL; 
 		this->name = "";
 		setChilds();
@@ -72,10 +74,11 @@ public:
 		region R = region(a, b);
 		this->reg = R;
 		this->name = "";
+		this->isDote = false;
 		this->pos.x = NULL;
 		this->pos.y = NULL;	
 	}Node() {
-		
+		this->isDote = false;
 		this->reg.BR.x = NULL ;
 		this->reg.BR.y = NULL ;
 		this->reg.TL.x = NULL ;
@@ -86,6 +89,7 @@ public:
 	}
 	Node(string N, Point P) {
 		this->name = N;
+		this->isDote = true;
 		this->pos = P;
 		this->reg.BR = P;
 		this->reg.TL = P;
@@ -132,24 +136,28 @@ public:
 		{
 			if (dot->pos.x < Xaxle && dot->pos.y < Yaxle) {
 				// area = nw
-				if (inc->nw->pos.x == NULL) {
-					inc->nw = dot;
+				if (inc->nw->isDote == false) {
+					inc->nw = dot; inc->isDote = true;
 				}
 				else {
 					Node* P = inc->nw;
-					inc->nw = new Node(inc->nw->reg);
+					Point Start = Point(inc->reg.TL.x, inc->reg.TL.y);
+					Point End = Point(Xaxle, Yaxle);
+					region reg = region(Start, End);
+					inc->nw = new Node(reg);
 					addDot(inc->nw, P);
 					addDot(inc->nw, dot);
 				}
 			}
 			else if (dot->pos.x > Xaxle && dot->pos.y < Yaxle) {
 				// area = ne
-				if (inc->ne->pos.x == NULL) {
+				if (inc->ne->isDote == false) {
 					inc->ne = dot;
+					inc->isDote = true;
 				}
 				else {
 					Node* P = inc->ne;
-					Point Start = Point(Xaxle, 0);
+					Point Start = Point(Xaxle, inc->reg.TL.y);
 					Point End = Point(inc->reg.BR.x, Yaxle);
 					region reg = region(Start, End);
 					inc->ne = new Node(reg);
@@ -159,24 +167,30 @@ public:
 			}
 			else if (dot->pos.x < Xaxle && dot->pos.y >Yaxle) {
 				// area = sw
-				if (inc->sw->pos.x == NULL) {
-					inc->sw = dot;
+				if (inc->sw->isDote == false) {
+					inc->sw = dot; inc->isDote = true;
 				}
 				else {
 					Node* P = inc->sw;
-					inc->sw = new Node(inc->sw->reg);
+					Point Start = Point(inc->reg.TL.x, Yaxle);
+					Point End = Point(Xaxle, inc->reg.BR.y);
+					region reg = region(Start, End);
+					inc->sw = new Node(reg);
 					addDot(inc->sw, P);
 					addDot(inc->sw, dot);
 				}
 			}
 			else if (dot->pos.x > Xaxle && dot->pos.y > Yaxle) {
 				// area = se
-				if (inc->se->pos.x == NULL) {
-					inc->se = dot;
+				if (inc->se->isDote == false) {
+					inc->se = dot; inc->isDote = true;
 				}
 				else {
 					Node* P = inc->se;
-					inc->se = new Node(inc->se->reg);
+					Point Start = Point(Xaxle, Yaxle);
+					Point End = Point(inc->reg.BR.x, inc->reg.BR.y);
+					region reg = region(Start, End);
+					inc->se = new Node(reg);
 					addDot(inc->se, P);
 					addDot(inc->se, dot);
 				}
@@ -246,7 +260,7 @@ void filler() {
 				x = stod(currentLine); line++;
 			}
 			else if(line == 7){
-				y = stod(currentLine); line  = 5;s
+				y = stod(currentLine); line  = 5;
 				Point P = Point(x, y);
 				Node* dot = new Node(name, P);
 				glob->addDot(glob, dot);
@@ -266,8 +280,29 @@ void filler() {
 int main()
 {
 	 filler();
-   
+
+	 cout << glob->getAxleY();
 
 
 
 }
+
+//ofstream input_file("data.txt", ios::app);
+//// Create the HTML table
+//input_file << "\n  <script>\n";
+//input_file << "    var canvas = document.getElementById(\"myCanvas\");\n";
+//input_file << "    var ctx = canvas.getContext(\"2d\");\n";
+//input_file << "    var x1 =" << a << "; \n";
+//input_file << "    var y1 = " << b << ";\n";
+//input_file << "    var x2 =" << c << ";\n";
+//input_file << "    var y2 = " << d << ";\n";
+//input_file << "    var height = y2 - y1;\n";
+//input_file << "    var width = x2 - x1;\n";
+//input_file << "    ctx.rect(x1, y1, width, height);\n";
+//input_file << "    ctx.stroke();\n";
+//input_file << "    ctx.font = \"20px Arial\";\n";
+//input_file << "    ctx.fillStyle = \"#000000\"; \n";
+//input_file << "    ctx.textAlign = \"center\";\n";
+//input_file << "    ctx.fillText(\"" << j << "\", (x1 + x2) / 2, (y1 + y2) / 2); \n";
+//input_file << "  </script>\n";
+//input_file.close();
