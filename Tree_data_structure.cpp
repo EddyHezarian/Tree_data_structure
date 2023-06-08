@@ -171,6 +171,7 @@ public:
 				else {
 					Node* P = inc->sw;
 					Point Start = Point(inc->reg.TL.x, Yaxle);
+
 					Point End = Point(Xaxle, inc->reg.BR.y);
 					region reg = region(Start, End);
 					inc->sw = new Node(reg);
