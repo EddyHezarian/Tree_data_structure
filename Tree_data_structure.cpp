@@ -484,7 +484,8 @@ void insertDot() { // ADD SINGLE DOT TO TREE
 	//------------------------------
 	ofstream openExFile;
 	openExFile.open(filepath, ios::app);
-	openExFile << "\n" << name << " " << x1 << " " << y1;
+	openExFile << name << " " << x1 << " " << y1;
+	openExFile.close();
 	cout << "\n\tdata File have been Updated !";
 }
 void deleteList() { // DELETE GLOBAL LIST AND REMOVE EX FILE 
